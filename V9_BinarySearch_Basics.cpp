@@ -1,5 +1,5 @@
 /*
-Binary Search Introduction : 
+Binary Search Introduction :
 https://www.naukri.com/code360/problems/binary-search_972?nps=true
 
 Via Iteration
@@ -32,15 +32,15 @@ int search(vector<int> &nums, int target) {
 
 // Lower Bound
 int lowerBound(vector<int> arr, int n, int x) {
-	int l=0,h=n-1,ans=n;
-	while(l<=h){
-		int m=(l+h)/2;
-		if(arr[m]>=x){
-			ans=m;
-			h=m-1; // so we've got the lowerbound, but we need to find the closest element that is bigger then x
-			// so we'll be searching in the left side amongst the smaller values then a[m] rn
-		}else l=m+1; // we got a value smaller then x, so we are searching in the right half amongst the larger values then a[m] rn
-	} return ans;
+    int l=0,h=n-1,ans=n;
+    while(l<=h){
+        int m=(l+h)/2;
+        if(arr[m]>=x){
+            ans=m;
+            h=m-1; // so we've got the lowerbound, but we need to find the closest element that is bigger then x
+            // so we'll be searching in the left side amongst the smaller values then a[m] rn
+        }else l=m+1; // we got a value smaller then x, so we are searching in the right half amongst the larger values then a[m] rn
+    } return ans;
 }
 Using C++ STL
 lb=lower_bound(arr,arr+n,x)-arr.begin();
@@ -92,42 +92,42 @@ int searchInsert(vector<int>& arr, int x) {
 
 // Floor
 int findFloor(int arr[], int n, int x) {
-	int low = 0, high = n - 1;
-	int ans = -1;
+    int low = 0, high = n - 1;
+    int ans = -1;
 
-	while (low <= high) {
-		int mid = (low + high) / 2;
-		// maybe an answer
-		if (arr[mid] <= x) {
-			ans = arr[mid];
-			//look for smaller index on the left
-			low = mid + 1;
-		}
-		else {
-			high = mid - 1; // look on the right
-		}
-	}
-	return ans;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        // maybe an answer
+        if (arr[mid] <= x) {
+            ans = arr[mid];
+            //look for smaller index on the left
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1; // look on the right
+        }
+    }
+    return ans;
 }
 
 // Ceil
 int findCeil(int arr[], int n, int x) {
-	int low = 0, high = n - 1;
-	int ans = -1;
+    int low = 0, high = n - 1;
+    int ans = -1;
 
-	while (low <= high) {
-		int mid = (low + high) / 2;
-		// maybe an answer
-		if (arr[mid] >= x) {
-			ans = arr[mid];
-			//look for smaller index on the left
-			high = mid - 1;
-		}
-		else {
-			low = mid + 1; // look on the right
-		}
-	}
-	return ans;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        // maybe an answer
+        if (arr[mid] >= x) {
+            ans = arr[mid];
+            //look for smaller index on the left
+            high = mid - 1;
+        }
+        else {
+            low = mid + 1; // look on the right
+        }
+    }
+    return ans;
 }
 
 // First Occurence
@@ -191,7 +191,7 @@ int count(vector<int>& arr, int n, int x) {
     return (ans.second - ans.first + 1); // +1 bcoz its 0 based indexing
 }
 
-// Search in ROtated Sorted Array I
+// Search in Rotated Sorted Array I
 class Solution {
 public:
     int search(vector<int>& a, int target) {
@@ -208,6 +208,85 @@ public:
                 else h=m-1;
             }
         }return -1;  // if not found
+    }
+};
+
+// Search in Rotated Sorted Array II
+class Solution {
+public:
+    int findMin(vector<int>& a) {
+        int l=0,h=a.size()-1,ans=INT_MAX;
+        while(l<=h){
+            int m=(l+h)/2;
+            if(a[l]<=a[h]){
+                ans=min(ans,a[l]); // this subarray is sorted from l to h
+                break;
+            }
+            if(a[l]<=a[m]){
+                ans=min(ans,a[l]);
+                l=m+1;
+            }else{
+                h=m-1;
+                ans=min(ans,a[m]);
+            }
+        }return ans;
+    }
+};
+
+class Solution {
+public:
+    int findMin(vector<int>& a) {
+        int l=0,h=a.size()-1,ans=INT_MAX;
+        while(l<=h){
+            int m=(l+h)/2;
+            if(a[l]<=a[h]){
+                // ans=min(ans,a[l]); // this subarray is sorted from l to h
+                if(a[l]<ans){
+                    ind=l;
+                    ans=a[l];
+                }
+                break;
+            }
+            if(a[l]<=a[m]){
+                // ans=min(ans,a[l]);
+                if(a[l]<ans){
+                    ind=l;
+                    ans=a[l];
+                }
+                l=m+1;
+            }else{
+                h=m-1;
+                // ans=min(ans,a[m]);
+                if(a[m]<ans){
+                    ind=m;
+                    ans=a[m];
+                }
+            }
+        }return ind;
+    }
+};
+
+// Single Element in Sorted Array
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& a) {
+        int n=a.size();
+        if(n==1) return a[0];
+        if(a[0]!=a[1]) return a[0];
+        if(a[n-1]!=a[n-2]) return a[n-1];
+        int l=1,h=n-2;
+        while(l<=h){
+            int m=(l+h)/2;
+            if(a[m]!=a[m+1] && a[m]!=a[m-1]) return a[m];
+            if(m%2==1 && a[m]==a[m-1] || m%2==0 && a[m]==a[m+1]) // odd index, so checking that the left value which is the even index has the same value or not
+            // if we have same value this means the single element lies on the right side. Both are same things
+            // standing on the left and checking for the right and viceversa
+            {
+                l=m+1;
+            }else{
+                h=m-1;
+            }
+        }return -1;
     }
 };
 
